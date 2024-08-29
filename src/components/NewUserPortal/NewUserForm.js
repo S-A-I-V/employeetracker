@@ -1,0 +1,146 @@
+import React from 'react';
+import styled from 'styled-components';
+import { TextField, MenuItem, Button as MuiButton } from '@mui/material';
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  padding-top: 4rem;
+  background-color: ${({ theme }) => theme.colors.background};
+`;
+
+const GlassCard = styled.div`
+  backdrop-filter: blur(15px);
+  background: ${({ theme }) => theme.colors.glass};
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  max-width: 600px; /* Increased width to accommodate more fields */
+  width: 100%;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+  
+  &:hover {
+    transform: scale(1.0001);
+    box-shadow: 0 10px 40px rgba(31, 38, 135, 0.5);
+  }
+`;
+
+const Title = styled.h2`
+  font-size: 2rem;
+  color: ${({ theme }) => theme.colors.text};
+  margin-bottom: 2rem;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
+
+const Button = styled(MuiButton)`
+  && {
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: ${({ theme }) => theme.colors.primary};
+    color: white;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+    margin-top: 1rem;
+
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.accent};
+    }
+  }
+`;
+
+const Logo = styled.img`
+  width: 120px;
+  margin-bottom: 1.5rem;
+`;
+
+const NewUserForm = () => {
+  const [gender, setGender] = React.useState('');
+  const [qualification, setQualification] = React.useState('');
+
+  return (
+    <Container>
+      <GlassCard>
+        <Logo src={require('../../assets/images/logo.png')} alt="Lenskart" />
+        <Title>New User Registration</Title>
+        <Form>
+          <TextField
+            label="Name"
+            variant="outlined"
+            fullWidth
+            InputProps={{
+              style: {
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                borderRadius: '10px',
+              },
+            }}
+          />
+          <TextField
+            label="Employee ID"
+            variant="outlined"
+            fullWidth
+            InputProps={{
+              style: {
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                borderRadius: '10px',
+              },
+            }}
+          />
+          <TextField
+            select
+            label="Gender"
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            variant="outlined"
+            fullWidth
+            InputProps={{
+              style: {
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                borderRadius: '10px',
+              },
+            }}
+          >
+            <MenuItem value="Male">Male</MenuItem>
+            <MenuItem value="Female">Female</MenuItem>
+            <MenuItem value="Other">Other</MenuItem>
+          </TextField>
+          <TextField
+            label="Qualification"
+            variant="outlined"
+            fullWidth
+            value={qualification}
+            onChange={(e) => setQualification(e.target.value)}
+            InputProps={{
+              style: {
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                borderRadius: '10px',
+              },
+            }}
+          />
+          {/* <TextField
+            label="UID"
+            variant="outlined"
+            fullWidth
+            InputProps={{
+              style: {
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                borderRadius: '10px',
+              },
+            }}
+          /> */}
+          <Button variant="contained">Register</Button>
+        </Form>
+      </GlassCard>
+    </Container>
+  );
+};
+
+export default NewUserForm;
