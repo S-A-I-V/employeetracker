@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 
 const Navbar = styled.nav`
   background: ${({ theme }) => theme.colors.primary};
@@ -98,7 +99,41 @@ const ButtonLabel = styled.span`
   font-weight: bold;
 `;
 
+const FeedbackMessage = styled.div`
+  margin-top: 1rem;
+  color: ${({ success }) => (success ? 'green' : 'red')};
+  font-size: 1.2rem;
+  font-weight: bold;
+`;
+
 const TopBar = ({ onFileUpload }) => {
+  const [feedback, setFeedback] = useState(null);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    console.log('File selected:', file);
+
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      axios
+        .post('http://localhost:5000/api/upload-csv', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((response) => {
+          console.log('Upload success:', response.data);
+          setFeedback({ success: true, message: 'File uploaded successfully!' });
+        })
+        .catch((error) => {
+          console.error('Upload error:', error);
+          setFeedback({ success: false, message: 'Failed to upload file.' });
+        });
+    }
+  };
+
   return (
     <Navbar>
       <LogoContainer>
@@ -115,15 +150,19 @@ const TopBar = ({ onFileUpload }) => {
         <NavLinkStyled to="/new-user" activeClassName="active">
           New User
         </NavLinkStyled>
+        <NavLinkStyled to="/edit-user" activeClassName="active">
+          Edit User
+        </NavLinkStyled>
         <UploadButtonContainer>
           <ButtonLabel>Choose File</ButtonLabel>
           <HiddenFileInput
             type="file"
             accept=".csv"
-            onChange={(e) => onFileUpload(e.target.files[0])}
+            onChange={handleFileChange}
           />
         </UploadButtonContainer>
       </NavLinks>
+      {feedback && <FeedbackMessage success={feedback.success}>{feedback.message}</FeedbackMessage>}
     </Navbar>
   );
 };
