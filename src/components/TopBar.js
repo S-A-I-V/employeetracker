@@ -50,7 +50,7 @@ const NavLinks = styled.div`
 
 const NavLinkStyled = styled(NavLink)`
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.6rem;
   text-decoration: none;
   transition: color 0.3s ease;
 
