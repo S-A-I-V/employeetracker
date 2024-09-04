@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { TextField, MenuItem, Button as MuiButton } from '@mui/material';
+import axios from 'axios'; // Add axios for making HTTP requests
 
 const Container = styled.div`
   display: flex;
@@ -28,11 +29,11 @@ const GlassCard = styled.div`
     box-shadow: 0 10px 40px rgba(31, 38, 135, 0.5);
   }
 `;
+
 const Logo = styled.img`
   width: 120px;
   margin-bottom: 1.5rem;
 `;
-
 
 const Title = styled.h2`
   font-size: 2rem;
@@ -63,23 +64,45 @@ const Button = styled(MuiButton)`
 `;
 
 const StationIDForm = () => {
-  const [shift, setShift] = React.useState('');
+  const [shift, setShift] = useState('');
+  const [uid, setUid] = useState('');
+  const [stationId, setStationId] = useState('');
 
   const handleShiftChange = (event) => {
     setShift(event.target.value);
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const data = {
+      employeeid: uid,  // UID input will be used as employeeid
+      stationid: stationId,
+      shift: shift
+    };
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/update-user', data);
+      console.log(response.data);
+      alert('Station ID and shift updated successfully!');
+    } catch (error) {
+      console.error('Error updating user:', error);
+      alert('Failed to update Station ID and shift.');
+    }
+  };
+
   return (
     <Container>
       <GlassCard>
-      <Logo src={require('../../assets/images/logo.png')} alt="Lenskart" />
-
+        <Logo src={require('../../assets/images/logo.png')} alt="Lenskart" />
         <Title>Station ID Portal</Title>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <TextField
             label="UID"
             variant="outlined"
             fullWidth
+            value={uid}
+            onChange={(e) => setUid(e.target.value)}
             InputProps={{
               style: {
                 backgroundColor: 'rgba(255, 255, 255, 0.15)',
@@ -91,6 +114,8 @@ const StationIDForm = () => {
             label="Station ID"
             variant="outlined"
             fullWidth
+            value={stationId}
+            onChange={(e) => setStationId(e.target.value)}
             InputProps={{
               style: {
                 backgroundColor: 'rgba(255, 255, 255, 0.15)',
@@ -116,7 +141,9 @@ const StationIDForm = () => {
             <MenuItem value="2pm-10pm">2pm-10pm</MenuItem>
             <MenuItem value="10pm-6am">10pm-6am</MenuItem>
           </TextField>
-          <Button variant="contained">Let's get working!!!</Button>
+          <Button variant="contained" type="submit">
+            Let's get working!!!
+          </Button>
         </Form>
       </GlassCard>
     </Container>

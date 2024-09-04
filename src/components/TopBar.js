@@ -5,17 +5,26 @@ import axios from 'axios';
 
 const Navbar = styled.nav`
   background: ${({ theme }) => theme.colors.primary};
-  padding: 0.5rem 2rem;
+  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;  
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);  
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.accentLight};  
+    transform: translateY(-2px);  /* Slightly lift the navbar */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);  /* Enhance shadow on hover */
+  }
 
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
   }
 `;
+
 
 const LogoContainer = styled.div`
   display: flex;

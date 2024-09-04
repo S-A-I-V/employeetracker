@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FiUser } from 'react-icons/fi';
+import axios from 'axios';
 
 const Container = styled.div`
   display: flex;
@@ -91,18 +92,51 @@ const Button = styled.button`
 `;
 
 const AttendanceForm = () => {
+  const [uid, setUid] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleInputChange = (event) => {
+    setUid(event.target.value);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/update-attendance', {
+        employeeid: uid
+      });
+
+      if (response.status === 200) {
+        setMessage('Attendance recorded successfully!');
+      } else {
+        setMessage('Failed to record attendance.');
+      }
+    } catch (error) {
+      console.error('Error updating attendance:', error);
+      setMessage('Error recording attendance.');
+    }
+  };
+
   return (
     <Container>
       <GlassCard>
         <Logo src={require('../../assets/images/logo.png')} alt="Lenskart" />
         <Title>Attendance Portal</Title>
-        <form>
+        <form onSubmit={handleSubmit}>
           <InputWrapper>
             <FiUser size={24} color="#333" />
-            <Input type="text" placeholder="Enter UID" required />
+            <Input
+              type="text"
+              placeholder="Enter UID"
+              value={uid}
+              onChange={handleInputChange}
+              required
+            />
           </InputWrapper>
           <Button type="submit">PRESENT SIR!!!</Button>
         </form>
+        {message && <p>{message}</p>}
         <p>
           Naye ho? <a href="/new-user">Register here</a>
         </p>
@@ -112,3 +146,11 @@ const AttendanceForm = () => {
 };
 
 export default AttendanceForm;
+
+
+
+/*schedule x attendance
+1 and 1- present
+1 and 0- absent
+0 and 0- weekly off
+*/
