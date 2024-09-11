@@ -67,24 +67,44 @@ const StationIDForm = () => {
   const [shift, setShift] = useState('');
   const [uid, setUid] = useState('');
   const [stationId, setStationId] = useState('');
+  const [isUIDScanned, setIsUIDScanned] = useState(false); // For managing one full scan
 
   const handleShiftChange = (event) => {
     setShift(event.target.value);
+  };
+
+  const handleUIDChange = (event) => {
+    if (!isUIDScanned) {
+      const trimmedUID = event.target.value.trim(); // Trimming spaces
+      setUid(trimmedUID);
+      setIsUIDScanned(true); // Prevent further input after full scan
+    }
+  };
+
+  const handleStationIdChange = (event) => {
+    const inputValue = event.target.value;
+    setStationId(inputValue.trim().toUpperCase());
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const data = {
-      employeeid: uid,  // UID input will be used as employeeid
+      employeeid: uid, // UID input will be used as employeeid
       stationid: stationId,
-      shift: shift
+      shift: shift,
     };
 
     try {
       const response = await axios.post('http://localhost:5000/api/update-user', data);
       console.log(response.data);
       alert('Station ID and shift updated successfully!');
+
+      // Reset form values after submission
+      setUid('');
+      setStationId('');
+      setShift('');
+      setIsUIDScanned(false); // Allow for a new scan/input
     } catch (error) {
       console.error('Error updating user:', error);
       alert('Failed to update Station ID and shift.');
@@ -102,26 +122,28 @@ const StationIDForm = () => {
             variant="outlined"
             fullWidth
             value={uid}
-            onChange={(e) => setUid(e.target.value)}
+            onChange={handleUIDChange} // Handling scanned or typed UID
             InputProps={{
               style: {
                 backgroundColor: 'rgba(255, 255, 255, 0.15)',
                 borderRadius: '10px',
               },
             }}
+            required
           />
           <TextField
             label="Station ID"
             variant="outlined"
             fullWidth
             value={stationId}
-            onChange={(e) => setStationId(e.target.value)}
+            onChange={handleStationIdChange} // Updated handler for station ID
             InputProps={{
               style: {
                 backgroundColor: 'rgba(255, 255, 255, 0.15)',
                 borderRadius: '10px',
               },
             }}
+            required
           />
           <TextField
             select
@@ -136,6 +158,7 @@ const StationIDForm = () => {
                 borderRadius: '10px',
               },
             }}
+            required
           >
             <MenuItem value="6am-2pm">6am-2pm</MenuItem>
             <MenuItem value="2pm-10pm">2pm-10pm</MenuItem>

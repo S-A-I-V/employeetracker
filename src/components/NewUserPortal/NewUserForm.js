@@ -67,22 +67,23 @@ const NewUserForm = () => {
   const [employeeID, setEmployeeID] = useState('');
   const [gender, setGender] = useState('');
   const [qualification, setQualification] = useState('');
+  const [agency, setAgency] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const userData = {
       name,
-      employeeid: employeeID,
+      employeeid: employeeID.trim().toUpperCase(), // Trim and auto-uppercase employee ID
       gender,
       education: qualification,
-      stationid: null, // Add any default values or other fields as necessary
-      shift: null, // Add shift or other fields if necessary
-      attendance: '0000000000000000000000000000000', // Default value for attendance
-      agency: 'N/A', // Any additional field that needs to be included
-      doj: new Date().toISOString().slice(0, 10), // Use current date as DOJ for demonstration
-      ageing: 0, // Default value for demonstration
-      throughput: 0 // Default value for demonstration
+      stationid: null,
+      shift: null,
+      attendance: '0000000000000000000000000000000',
+      agency: agency, // Include agency field
+      doj: new Date().toISOString().slice(0, 10),
+      ageing: 0,
+      throughput: 0
     };
 
     try {
@@ -96,11 +97,11 @@ const NewUserForm = () => {
 
       if (response.ok) {
         alert('User registered successfully');
-        // Clear form
         setName('');
         setEmployeeID('');
         setGender('');
         setQualification('');
+        setAgency(''); // Clear agency field
       } else {
         alert('Failed to register user');
       }
@@ -166,6 +167,19 @@ const NewUserForm = () => {
             fullWidth
             value={qualification}
             onChange={(e) => setQualification(e.target.value)}
+            InputProps={{
+              style: {
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                borderRadius: '10px',
+              },
+            }}
+          />
+          <TextField
+            label="Agency"
+            variant="outlined"
+            fullWidth
+            value={agency}
+            onChange={(e) => setAgency(e.target.value)}
             InputProps={{
               style: {
                 backgroundColor: 'rgba(255, 255, 255, 0.15)',

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { FiUser } from 'react-icons/fi';
 import axios from 'axios';
@@ -52,7 +52,7 @@ const InputWrapper = styled.div`
   transition: border-color 0.3s ease;
 
   &:focus-within {
-    border-color: ${({ theme }) => theme.colors.accent}; /* Change border color on focus */
+    border-color: ${({ theme }) => theme.colors.accent}; 
   }
 `;
 
@@ -89,18 +89,33 @@ const Button = styled.button`
   &:hover {
     background: ${({ theme }) => theme.colors.accent};
   }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
 `;
 
 const AttendanceForm = () => {
   const [uid, setUid] = useState('');
   const [message, setMessage] = useState('');
+  const [isDisabled, setIsDisabled] = useState(false);
+  const inputRef = useRef(null); // To automatically focus the input field
+
+  // Automatically focus the input field on component mount or page refresh
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   const handleInputChange = (event) => {
-    setUid(event.target.value);
+    // Trim the input value before saving it to state
+    setUid(event.target.value.trim());
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    setIsDisabled(true);
 
     try {
       const response = await axios.post('http://localhost:5000/api/update-attendance', {
@@ -108,14 +123,27 @@ const AttendanceForm = () => {
       });
 
       if (response.status === 200) {
-        setMessage('Attendance recorded successfully!');
+        setMessage('Attendance recorded successfully!!!');
+        window.alert('Attendance recorded successfully!!!');
       } else {
-        setMessage('Failed to record attendance.');
+        setMessage('Failed to record attendance!!!');
+        window.alert('Failed to record attendance!!!');
       }
     } catch (error) {
       console.error('Error updating attendance:', error);
       setMessage('Error recording attendance.');
     }
+
+    // Clear the UID input after submission
+    setUid('');
+
+    // Refocus after the alert is closed, using setTimeout with a 0ms delay
+    setTimeout(() => {
+      inputRef.current.focus();
+    }, 0);
+
+    // Re-enable the button immediately
+    setIsDisabled(false);
   };
 
   return (
@@ -128,13 +156,17 @@ const AttendanceForm = () => {
             <FiUser size={24} color="#333" />
             <Input
               type="text"
-              placeholder="Enter UID"
+              placeholder="Enter UID or scan barcode"
               value={uid}
               onChange={handleInputChange}
               required
+              disabled={isDisabled}
+              ref={inputRef} // Reference for automatic focus
             />
           </InputWrapper>
-          <Button type="submit">PRESENT SIR!!!</Button>
+          <Button type="submit" disabled={isDisabled}>
+            PRESENT SIR!!!
+          </Button>
         </form>
         {message && <p>{message}</p>}
         <p>
@@ -146,11 +178,3 @@ const AttendanceForm = () => {
 };
 
 export default AttendanceForm;
-
-
-
-/*schedule x attendance
-1 and 1- present
-1 and 0- absent
-0 and 0- weekly off
-*/
