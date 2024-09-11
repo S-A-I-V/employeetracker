@@ -9,14 +9,14 @@ const Navbar = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 10px;  
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);  
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);  /* Default shadow */
   transition: all 0.3s ease;
 
   &:hover {
     background: ${({ theme }) => theme.colors.accentLight};  
     transform: translateY(-2px);  /* Slightly lift the navbar */
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);  /* Enhance shadow on hover */
+    box-shadow: 0 12px 50px rgba(0, 0, 0, 0.3);  /* Enhanced shadow on hover */
   }
 
   @media (max-width: 768px) {
@@ -24,6 +24,7 @@ const Navbar = styled.nav`
     align-items: center;
   }
 `;
+
 
 
 const LogoContainer = styled.div`
