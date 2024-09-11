@@ -93,10 +93,9 @@ const AdminLogin = ({ handleLogin }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Simple hardcoded check for admin login (can be replaced with a real backend auth check)
     if (username === 'Admin' && password === 'Bhiwadi@2024') {
-      handleLogin(); // Call the login function from App.js to update isAdmin state
-      navigate('/new-user'); // Redirect to New User page after login
+      handleLogin(); 
+      navigate('/new-user'); 
     } else {
       alert('Invalid credentials');
     }
