@@ -1,38 +1,47 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import { GlobalStyle } from './styles/GlobalStyles'; // Correct path for GlobalStyles
-import { theme } from './styles/theme'; // Correct path for theme
-import AttendancePage from './pages/AttendancePage'; // Correct path for AttendancePage
-import StationPage from './pages/StationPage'; // Correct path for StationPage
-import NewUserPage from './pages/NewUserPage'; // Correct path for NewUserPage
-import EditUserPortal from './pages/EditUserPortal'; // Correct path for EditUserPortal
-import TopBar from './components/TopBar'; // Correct path for TopBar
-import AdminLogin from './components/AdminLogin'; // Correct path for AdminLogin
-import PrivateRoute from './components/PrivateRoute'; // Correct path for PrivateRoute
+import { GlobalStyle } from './styles/GlobalStyles';
+import { theme } from './styles/theme';
+import AttendancePage from './pages/AttendancePage';
+import StationPage from './pages/StationPage';
+import NewUserPage from './pages/NewUserPage';
+import EditUserPortal from './pages/EditUserPortal';
+import TopBar from './components/TopBar';
+import AdminLogin from './components/AdminLogin';
 
 function App() {
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Check localStorage for admin status on component mount
+  useEffect(() => {
+    const adminStatus = localStorage.getItem('isAdmin');
+    if (adminStatus === 'true') {
+      setIsAdmin(true);
+    }
+  }, []);
+
+  const handleLogin = () => {
+    setIsAdmin(true);
+    localStorage.setItem('isAdmin', 'true');
+  };
+
+  const handleLogout = () => {
+    setIsAdmin(false);
+    localStorage.removeItem('isAdmin');
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <Router>
-        <TopBar />
+        <TopBar isAdmin={isAdmin} handleLogout={handleLogout} />
         <Routes>
           <Route path="/" element={<AttendancePage />} />
           <Route path="/station" element={<StationPage />} />
-          
-          {/* Protected Routes */}
-          <Route path="/admin-login" element={<AdminLogin />} />
-          <Route path="/new-user" element={
-            <PrivateRoute>
-              <NewUserPage />
-            </PrivateRoute>
-          } />
-          <Route path="/edit-user" element={
-            <PrivateRoute>
-              <EditUserPortal />
-            </PrivateRoute>
-          } />
+          <Route path="/new-user" element={isAdmin ? <NewUserPage /> : <Navigate to="/admin-login" />} />
+          <Route path="/edit-user" element={isAdmin ? <EditUserPortal /> : <Navigate to="/admin-login" />} />
+          <Route path="/admin-login" element={<AdminLogin handleLogin={handleLogin} />} />
         </Routes>
       </Router>
     </ThemeProvider>

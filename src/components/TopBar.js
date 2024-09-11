@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -10,13 +10,13 @@ const Navbar = styled.nav`
   justify-content: space-between;
   align-items: center;
   border-radius: 10px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);  
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.accentLight};  
-    transform: translateY(-2px);  
-    box-shadow: 0 12px 50px rgba(0, 0, 0, 0.3);  
+    background: ${({ theme }) => theme.colors.accentLight};
+    transform: translateY(-2px);
+    box-shadow: 0 12px 50px rgba(0, 0, 0, 0.3);
   }
 
   @media (max-width: 768px) {
@@ -107,14 +107,7 @@ const ButtonLabel = styled.span`
   font-weight: bold;
 `;
 
-const FeedbackMessage = styled.div`
-  margin-top: 1rem;
-  color: ${({ success }) => (success ? 'green' : 'red')};
-  font-size: 1.2rem;
-  font-weight: bold;
-`;
-
-const AuthButton = styled.button`
+const LogoutButton = styled.button`
   background: ${({ theme }) => theme.colors.primary};
   color: white;
   border: none;
@@ -133,21 +126,11 @@ const AuthButton = styled.button`
   }
 `;
 
-const TopBar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [feedback, setFeedback] = useState(null);
+const TopBar = ({ isAdmin, handleLogout }) => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Check if user is logged in (i.e., if 'isAdmin' is stored in localStorage)
-    const isAdmin = localStorage.getItem('isAdmin');
-    setIsLoggedIn(!!isAdmin); // Converts string to boolean
-  }, []);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    console.log('File selected:', file);
-
     if (file) {
       const formData = new FormData();
       formData.append('file', file);
@@ -160,23 +143,11 @@ const TopBar = () => {
         })
         .then((response) => {
           console.log('Upload success:', response.data);
-          setFeedback({ success: true, message: 'File uploaded successfully!' });
         })
         .catch((error) => {
           console.error('Upload error:', error);
-          setFeedback({ success: false, message: 'Failed to upload file.' });
         });
     }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('isAdmin'); // Remove admin status from localStorage
-    setIsLoggedIn(false); // Update state to logged out
-    navigate('/admin-login'); // Redirect to login page
-  };
-
-  const handleLoginRedirect = () => {
-    navigate('/admin-login'); // Redirect to login page
   };
 
   return (
@@ -207,10 +178,11 @@ const TopBar = () => {
           />
         </UploadButtonContainer>
       </NavLinks>
-      <AuthButton onClick={isLoggedIn ? handleLogout : handleLoginRedirect}>
-        {isLoggedIn ? 'Logout' : 'Login'}
-      </AuthButton>
-      {feedback && <FeedbackMessage success={feedback.success}>{feedback.message}</FeedbackMessage>}
+      {isAdmin ? (
+        <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+      ) : (
+        <LogoutButton onClick={() => navigate('/admin-login')}>Login</LogoutButton>
+      )}
     </Navbar>
   );
 };

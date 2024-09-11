@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 const Container = styled.div`
   display: flex;
@@ -22,16 +22,11 @@ const GlassCard = styled.div`
   width: 100%;
   text-align: center;
   transition: all 0.3s ease-in-out;
-  
+
   &:hover {
     transform: scale(1.0001);
     box-shadow: 0 10px 40px rgba(31, 38, 135, 0.5);
   }
-`;
-
-const Logo = styled.img`
-  width: 120px;
-  margin-bottom: 1.5rem;
 `;
 
 const Title = styled.h2`
@@ -53,11 +48,6 @@ const InputWrapper = styled.div`
   border-radius: 10px;
   padding: 1rem;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  transition: border-color 0.3s ease;
-
-  &:focus-within {
-    border-color: ${({ theme }) => theme.colors.accent}; 
-  }
 `;
 
 const Input = styled.input`
@@ -95,17 +85,17 @@ const Button = styled.button`
   }
 `;
 
-const AdminLogin = () => {
+const AdminLogin = ({ handleLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Simple hardcoded check for demo purposes
-    if (username === 'admin' && password === 'password123') {
-      localStorage.setItem('isAdmin', 'true');
+    // Simple hardcoded check for admin login (can be replaced with a real backend auth check)
+    if (username === 'Admin' && password === 'Bhiwadi@2024') {
+      handleLogin(); // Call the login function from App.js to update isAdmin state
       navigate('/new-user'); // Redirect to New User page after login
     } else {
       alert('Invalid credentials');
@@ -115,9 +105,8 @@ const AdminLogin = () => {
   return (
     <Container>
       <GlassCard>
-        <Logo src={require('../assets/images/logo.png')} alt="Lenskart" />
         <Title>Admin Login</Title>
-        <Form onSubmit={handleLogin}>
+        <Form onSubmit={handleSubmit}>
           <InputWrapper>
             <Input
               type="text"
