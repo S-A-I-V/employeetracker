@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Navbar = styled.nav`
@@ -10,13 +10,13 @@ const Navbar = styled.nav`
   justify-content: space-between;
   align-items: center;
   border-radius: 10px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);  /* Default shadow */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);  
   transition: all 0.3s ease;
 
   &:hover {
     background: ${({ theme }) => theme.colors.accentLight};  
-    transform: translateY(-2px);  /* Slightly lift the navbar */
-    box-shadow: 0 12px 50px rgba(0, 0, 0, 0.3);  /* Enhanced shadow on hover */
+    transform: translateY(-2px);  
+    box-shadow: 0 12px 50px rgba(0, 0, 0, 0.3);  
   }
 
   @media (max-width: 768px) {
@@ -24,8 +24,6 @@ const Navbar = styled.nav`
     align-items: center;
   }
 `;
-
-
 
 const LogoContainer = styled.div`
   display: flex;
@@ -116,8 +114,35 @@ const FeedbackMessage = styled.div`
   font-weight: bold;
 `;
 
-const TopBar = ({ onFileUpload }) => {
+const AuthButton = styled.button`
+  background: ${({ theme }) => theme.colors.primary};
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.accent};
+    transform: scale(1.05);
+    box-shadow: 0 10px 40px rgba(31, 38, 135, 0.5);
+  }
+`;
+
+const TopBar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [feedback, setFeedback] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is logged in (i.e., if 'isAdmin' is stored in localStorage)
+    const isAdmin = localStorage.getItem('isAdmin');
+    setIsLoggedIn(!!isAdmin); // Converts string to boolean
+  }, []);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -142,6 +167,16 @@ const TopBar = ({ onFileUpload }) => {
           setFeedback({ success: false, message: 'Failed to upload file.' });
         });
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('isAdmin'); // Remove admin status from localStorage
+    setIsLoggedIn(false); // Update state to logged out
+    navigate('/admin-login'); // Redirect to login page
+  };
+
+  const handleLoginRedirect = () => {
+    navigate('/admin-login'); // Redirect to login page
   };
 
   return (
@@ -172,6 +207,9 @@ const TopBar = ({ onFileUpload }) => {
           />
         </UploadButtonContainer>
       </NavLinks>
+      <AuthButton onClick={isLoggedIn ? handleLogout : handleLoginRedirect}>
+        {isLoggedIn ? 'Logout' : 'Login'}
+      </AuthButton>
       {feedback && <FeedbackMessage success={feedback.success}>{feedback.message}</FeedbackMessage>}
     </Navbar>
   );
