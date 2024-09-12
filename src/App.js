@@ -13,7 +13,6 @@ import AdminLogin from './components/AdminLogin';
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
 
-  // Check localStorage for admin status on component mount
   useEffect(() => {
     const adminStatus = localStorage.getItem('isAdmin');
     if (adminStatus === 'true') {

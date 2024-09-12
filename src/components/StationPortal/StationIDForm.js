@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { TextField, MenuItem, Button as MuiButton } from '@mui/material';
-import axios from 'axios'; // Add axios for making HTTP requests
+import axios from 'axios'; 
 
 const Container = styled.div`
   display: flex;
@@ -67,7 +67,7 @@ const StationIDForm = () => {
   const [shift, setShift] = useState('');
   const [uid, setUid] = useState('');
   const [stationId, setStationId] = useState('');
-  const [isUIDScanned, setIsUIDScanned] = useState(false); // For managing one full scan
+  const [isUIDScanned, setIsUIDScanned] = useState(false); 
 
   const handleShiftChange = (event) => {
     setShift(event.target.value);
@@ -75,9 +75,9 @@ const StationIDForm = () => {
 
   const handleUIDChange = (event) => {
     if (!isUIDScanned) {
-      const trimmedUID = event.target.value.trim(); // Trimming spaces
+      const trimmedUID = event.target.value.trim(); 
       setUid(trimmedUID);
-      setIsUIDScanned(true); // Prevent further input after full scan
+      setIsUIDScanned(true); 
     }
   };
 
@@ -90,7 +90,7 @@ const StationIDForm = () => {
     event.preventDefault();
 
     const data = {
-      employeeid: uid, // UID input will be used as employeeid
+      employeeid: uid, 
       stationid: stationId,
       shift: shift,
     };
@@ -100,11 +100,10 @@ const StationIDForm = () => {
       console.log(response.data);
       alert('Station ID and shift updated successfully!');
 
-      // Reset form values after submission
       setUid('');
       setStationId('');
       setShift('');
-      setIsUIDScanned(false); // Allow for a new scan/input
+      setIsUIDScanned(false); 
     } catch (error) {
       console.error('Error updating user:', error);
       alert('Failed to update Station ID and shift.');
@@ -122,7 +121,7 @@ const StationIDForm = () => {
             variant="outlined"
             fullWidth
             value={uid}
-            onChange={handleUIDChange} // Handling scanned or typed UID
+            onChange={handleUIDChange} 
             InputProps={{
               style: {
                 backgroundColor: 'rgba(255, 255, 255, 0.15)',
@@ -136,7 +135,7 @@ const StationIDForm = () => {
             variant="outlined"
             fullWidth
             value={stationId}
-            onChange={handleStationIdChange} // Updated handler for station ID
+            onChange={handleStationIdChange} 
             InputProps={{
               style: {
                 backgroundColor: 'rgba(255, 255, 255, 0.15)',

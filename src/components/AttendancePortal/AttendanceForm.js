@@ -100,15 +100,13 @@ const AttendanceForm = () => {
   const [uid, setUid] = useState('');
   const [message, setMessage] = useState('');
   const [isDisabled, setIsDisabled] = useState(false);
-  const inputRef = useRef(null); // To automatically focus the input field
+  const inputRef = useRef(null); 
 
-  // Automatically focus the input field on component mount or page refresh
   useEffect(() => {
     inputRef.current.focus();
   }, []);
 
   const handleInputChange = (event) => {
-    // Trim the input value before saving it to state
     setUid(event.target.value.trim());
   };
 
@@ -134,15 +132,11 @@ const AttendanceForm = () => {
       setMessage('Error recording attendance.');
     }
 
-    // Clear the UID input after submission
     setUid('');
-
-    // Refocus after the alert is closed, using setTimeout with a 0ms delay
     setTimeout(() => {
       inputRef.current.focus();
     }, 0);
 
-    // Re-enable the button immediately
     setIsDisabled(false);
   };
 
@@ -161,7 +155,7 @@ const AttendanceForm = () => {
               onChange={handleInputChange}
               required
               disabled={isDisabled}
-              ref={inputRef} // Reference for automatic focus
+              ref={inputRef} 
             />
           </InputWrapper>
           <Button type="submit" disabled={isDisabled}>

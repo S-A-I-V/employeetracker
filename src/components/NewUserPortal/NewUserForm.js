@@ -74,7 +74,7 @@ const NewUserForm = () => {
 
     const userData = {
       name,
-      employeeid: employeeID.trim().toUpperCase(), // Trim and auto-uppercase employee ID
+      employeeid: employeeID.trim().toUpperCase(), 
       gender,
       education: qualification,
       stationid: null,

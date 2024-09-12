@@ -141,17 +141,15 @@ const EditUserPortal = () => {
       .catch(error => console.error('Error removing user:', error));
   };
 
-  // Handle form submission by preventing default
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    handleSearch(); // Trigger the search manually
+    handleSearch(); 
   };
 
-  // Handle Enter keypress in input field
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      e.preventDefault(); // Prevent the default form submission
-      handleSearch(); // Trigger the search manually
+      e.preventDefault(); 
+      handleSearch(); 
     }
   };
 
@@ -167,7 +165,7 @@ const EditUserPortal = () => {
                 placeholder="Enter Employee ID"
                 value={employeeId}
                 onChange={(e) => setEmployeeId(e.target.value)}
-                onKeyDown={handleKeyDown} // Listen for Enter key press
+                onKeyDown={handleKeyDown} 
               />
             </InputWrapper>
             <Button type="button" onClick={handleSearch}>Search User</Button>
