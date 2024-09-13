@@ -67,23 +67,19 @@ const StationIDForm = () => {
   const [shift, setShift] = useState('');
   const [uid, setUid] = useState('');
   const [stationId, setStationId] = useState('');
-  const [isUIDScanned, setIsUIDScanned] = useState(false); 
 
   const handleShiftChange = (event) => {
     setShift(event.target.value);
   };
 
   const handleUIDChange = (event) => {
-    if (!isUIDScanned) {
-      const trimmedUID = event.target.value.trim(); 
-      setUid(trimmedUID);
-      setIsUIDScanned(true); 
-    }
+    const trimmedUID = event.target.value.trim(); // Trim any spaces
+    setUid(trimmedUID); // Set UID state
   };
 
   const handleStationIdChange = (event) => {
     const inputValue = event.target.value;
-    setStationId(inputValue.trim().toUpperCase());
+    setStationId(inputValue.trim().toUpperCase()); // Trim spaces and convert to uppercase
   };
 
   const handleSubmit = async (event) => {
@@ -103,7 +99,6 @@ const StationIDForm = () => {
       setUid('');
       setStationId('');
       setShift('');
-      setIsUIDScanned(false); 
     } catch (error) {
       console.error('Error updating user:', error);
       alert('Failed to update Station ID and shift.');
