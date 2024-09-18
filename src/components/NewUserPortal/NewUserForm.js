@@ -80,7 +80,7 @@ const NewUserForm = () => {
       stationid: null,
       shift: null,
       attendance: '0000000000000000000000000000000',
-      agency: agency, // Include agency field
+      agency: agency, 
       doj: new Date().toISOString().slice(0, 10),
       ageing: 0,
       throughput: 0
@@ -101,7 +101,7 @@ const NewUserForm = () => {
         setEmployeeID('');
         setGender('');
         setQualification('');
-        setAgency(''); // Clear agency field
+        setAgency(''); 
       } else {
         alert('Failed to register user');
       }

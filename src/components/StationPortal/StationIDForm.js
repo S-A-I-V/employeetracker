@@ -73,13 +73,13 @@ const StationIDForm = () => {
   };
 
   const handleUIDChange = (event) => {
-    const trimmedUID = event.target.value.trim(); // Trim any spaces
-    setUid(trimmedUID); // Set UID state
+    const trimmedUID = event.target.value.trim(); // sahi se entry to kr nhi skte
+    setUid(trimmedUID); 
   };
 
   const handleStationIdChange = (event) => {
     const inputValue = event.target.value;
-    setStationId(inputValue.trim().toUpperCase()); // Trim spaces and convert to uppercase
+    setStationId(inputValue.trim().toUpperCase()); 
   };
 
   const handleSubmit = async (event) => {
