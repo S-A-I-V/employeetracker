@@ -92,7 +92,7 @@ const StationIDForm = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:5000/api/update-user', data);
+      const response = await axios.post('http://192.168.27.143:5006/api/update-user', data);
       console.log(response.data);
       alert('Station ID and shift updated successfully!');
 

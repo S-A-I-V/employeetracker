@@ -87,7 +87,7 @@ const NewUserForm = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/api/add-user', {
+      const response = await fetch('http://192.168.27.143:5006/api/add-user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
