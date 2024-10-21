@@ -103,7 +103,7 @@ const EditUserPortal = () => {
   const [shift, setShift] = useState('');
 
   const handleSearch = () => {
-    axios.get(`http://localhost:5000/api/user/${employeeId}`)
+    axios.get(`http://192.168.27.143:5006/api/user/${employeeId}`)
       .then(response => {
         setUserData(response.data);
         setStationId(response.data.stationid);
@@ -116,7 +116,7 @@ const EditUserPortal = () => {
   };
 
   const handleUpdateUser = () => {
-    axios.post('http://localhost:5000/api/update-user', {
+    axios.post('http://192.168.27.143:5006/api/update-user', {
       employeeid: userData.employeeid,
       stationid: stationId,
       shift: shift,
@@ -132,7 +132,7 @@ const EditUserPortal = () => {
   };
 
   const handleRemoveUser = () => {
-    axios.delete(`http://localhost:5000/api/remove-user/${userData.employeeid}`)
+    axios.delete(`http://192.168.27.143:5006/api/remove-user/${userData.employeeid}`)
       .then(response => {
         alert('User removed successfully');
         setUserData(null);
